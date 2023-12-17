@@ -11,7 +11,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # Add a step to create or update the config.json file
       - name: Create config.json
         run: |
           echo '{
@@ -21,7 +20,6 @@ jobs:
             "database": "${{ secrets.DB_NAME }}"
           }' > configs/db_config.json
 
-      # Your existing steps...
       - name: Build, Push and Release a Docker container to Heroku.
         uses: gonuit/heroku-docker-deploy@v1.3.3
         with:
