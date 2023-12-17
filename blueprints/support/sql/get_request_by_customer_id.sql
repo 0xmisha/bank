@@ -1,0 +1,1 @@
+select * from requests where customer_id = $customer_id

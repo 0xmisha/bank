@@ -1,0 +1,1 @@
+SELECT r.* FROM requests AS r JOIN client AS c ON r.customer_id = c.id_contract WHERE c.surname = '$surname';

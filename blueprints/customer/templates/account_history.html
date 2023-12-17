@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRgKpGOTR2MHFN8pNTBm4jRTMG5duStbZo5V9WNB7" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank</title>
+    <link rel="stylesheet" href="../../../static/style.css">
+    <style>
+        .btn-primary .glyphicon {
+            color: white; /* Задает белый цвет иконкам */
+            font-size: 16px; /* Увеличивает размер иконки */
+        }
+
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="custom-heading">История транзакций</h1>
+
+        {% if model %}
+            {% for account_id, transactions in model.items() %}
+                <h2 class="custom-heading">История для счета {{ account_id }}</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Тип</th>
+                            <th>Сумма</th>
+                            <th>Дата перевода</th>
+                            <th>Счет отправителя</th>
+                            <th>Счет получателя</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                        <tr>
+                            <td>
+                                {% if account_id == transaction.account_from %}
+                                    Списание
+                                {% elif account_id == transaction.account_to %}
+                                    Пополнение
+                                {% endif %}
+                            </td>
+                            <td>{{ transaction.amount }}</td>
+                            <td>{{ transaction.transfer_date }}</td>
+                            <td>{{ transaction.account_from }}</td>
+                            <td>{{ transaction.account_to }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div id="pagination-{{ account_id }}" class="hidden pagination">
+                    <button class="prevv custom-button">
+                        &#8592
+                    </button>
+                    <button class="next custom-button">
+                        &#8594
+                    </button>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h1 class="custom-heading">У вас пока нет счетов</h1>
+        {% endif %}
+
+        <div class="button-container">
+            <a href="/customer" class="custom-button">Назад</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const rowsPerPage = 5;
+            function addEmptyRows(table, count) {
+                for (let i = 0; i < count; i++) {
+                    let row = table.insertRow();
+                    for (let j = 0; j < 5; j++) {
+                        let cell = row.insertCell();
+                        cell.innerHTML = "&nbsp;";
+                    }
+                }
+            }
+
+            document.querySelectorAll('.pagination').forEach(pagination => {
+                const table = pagination.previousElementSibling;
+                const rows = table.querySelectorAll('tbody tr');
+                const rowsCount = rows.length;
+
+                let currentPage = 1;
+                if (rowsCount < rowsPerPage) {
+                    addEmptyRows(table, rowsPerPage - rowsCount);
+                }
+
+                if (rowsCount > rowsPerPage) {
+                    pagination.classList.remove('hidden');
+                }
+
+                function displayRows(start, end) {
+                    rows.forEach((row, index) => {
+                        if (index >= start && index < end) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                }
+
+                function updatePagination() {
+                    const start = (currentPage - 1) * rowsPerPage;
+                    const end = start + rowsPerPage;
+                    displayRows(start, end);
+                }
+
+                pagination.querySelector('.prevv').addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        updatePagination();
+                    }
+                });
+
+                pagination.querySelector('.next').addEventListener('click', () => {
+                    if (currentPage * rowsPerPage < rowsCount) {
+                        currentPage++;
+                        updatePagination();
+                    }
+                });
+
+                updatePagination();
+            });
+        });
+    </script>
+</body>
+</html>

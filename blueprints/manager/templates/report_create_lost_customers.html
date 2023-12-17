@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отчет</title>
+    <link rel="stylesheet" href="../../../static/style.css">
+    <style>
+        body {
+            color: white;
+        }
+
+        .input-container {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .custom-input {
+            padding: 10px;
+            margin-bottom: 5px;
+        }
+
+        .container {
+            width: 300px;
+            margin: auto;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 100%;
+            }
+        }
+
+        .custom-label {
+            position: absolute;
+            top: -15px;
+            left: 5px;
+            transition: all 0.3s;
+            pointer-events: none;
+            color: #888;
+            background-color: #333;
+            padding: 0 5px;
+        }
+
+        .custom-input:focus + .custom-label,
+        .custom-input:not(:placeholder-shown) + .custom-label {
+            top: -15px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #333;
+            padding: 0 5px;
+        }
+
+        .submit-button-container {
+            margin-top: 20px;
+        }
+
+        .button-container a {
+            margin-top: 10px;
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        input[type=number] {
+          -moz-appearance: textfield;
+        }
+
+        input[type=date], input[type=text] {
+          padding: 10px;
+        }
+
+        .report-description {
+            margin-bottom: 20px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1 class="custom-heading">Создание отчета</h1>
+    <h1 class="custom-heading">"Отток клиентов"</h1>
+    <h1 class="custom-heading">для анализа тенденций закрытия счетов</h1>
+        <div class="container">
+    {% if msg %}
+        <div class="success-message" style="color: green; text-align: center; margin-bottom: 10px;">
+            {{ msg }}
+        </div>
+    {% endif %}
+
+    {% if err_msg %}
+        <div class="error-message" style="color: red; text-align: center; margin-bottom: 10px;">
+            {{ err_msg }}
+        </div>
+    {% endif %}
+
+    <div class="container">
+        <form action="/manager/create_report/lost_customers" method="post">
+
+            <div class="input-container">
+                <input type="text" id="report_title" name="report_title" class="custom-input" placeholder=" " required>
+                <label for="report_title" class="custom-label">Название отчета</label>
+            </div>
+
+            <div class="input-container">
+                <input type="date" id="date_from" name="date_from" class="custom-input" required>
+                <label for="date_from" class="custom-label">Дата закрытия аккаунта с</label>
+            </div>
+
+            <div class="input-container">
+                <input type="date" id="date_to" name="date_to" class="custom-input" required>
+                <label for="date_to" class="custom-label">Дата закрытия аккаунта по</label>
+            </div>
+
+            <div class="input-container">
+                <input type="number" id="age_from" name="age_from" class="custom-input" placeholder=" " required>
+                <label for="age_from" class="custom-label">Возраст клиента с</label>
+            </div>
+
+            <div class="input-container">
+                <input type="number" id="age_to" name="age_to" class="custom-input" placeholder=" " required>
+                <label for="age_to" class="custom-label">Возраст клиента по</label>
+            </div>
+
+            <div class="submit-button-container">
+                <button type="submit" class="custom-button">Создать отчет</button>
+            </div>
+
+        </form>
+        <div class="button-container">
+            <a href="/manager/create_report" class="custom-button">Назад</a>
+        </div>
+    </div>
+</body>
+
+</html>

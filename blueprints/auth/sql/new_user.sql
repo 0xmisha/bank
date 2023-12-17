@@ -1,0 +1,1 @@
+INSERT INTO external_users(login, password, role) VALUE('$login', '$password', 'customer');

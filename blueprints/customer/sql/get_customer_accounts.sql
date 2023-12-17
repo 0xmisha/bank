@@ -1,0 +1,1 @@
+select id_account, balance from account where id_client = $customer_id

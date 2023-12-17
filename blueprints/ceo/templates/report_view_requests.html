@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отчеты по обращениям</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRgKpGOTR2MHFN8pNTBm4jRTMG5duStbZo5V9WNB7" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <style>
+
+        .small-text {
+            font-size: larger;
+        }
+        body {
+            color: white;
+        }
+        .report-title {
+            cursor: pointer;
+            color: #007bff;
+        }
+        .report-content {
+            display: none;
+            margin-top: 10px;
+        }
+        .table {
+            color: #fff;
+        }
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .hidden {
+            display: none;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40vh;
+            width: 80vw;
+            margin: auto;
+        }
+        .custom-button {
+            margin: 10px;
+            max-width: 500px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center; /* Выравнивает элементы по центру по горизонтали */
+            flex-wrap: wrap; /* Позволяет элементам обертываться на следующую строку при необходимости */
+        }
+
+
+    </style>
+</head>
+
+<script>
+    function toggleReportContent(reportId) {
+        var content = document.getElementById(reportId);
+        if (content.style.display === "none") {
+            content.style.display = "block";
+        } else {
+            content.style.display = "none";
+        }
+    }
+</script>
+
+<body>
+    <div class="container">
+        <h1 class="custom-heading">Отчеты "Эффективность обслуживания клиентов"</h1>
+        <h1 class="custom-heading">для анализа необходимости улучшения сервиса.</h1>
+        <div class="chart-container" style="position: relative; height:40vh; width:80vw">
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="button-container">
+        {% for report_title, report_data in reports.items() %}
+            <h2 class="custom-button" onclick="toggleReportContent('report_{{ report_title }}')">
+                {{ report_title }}
+            </h2>
+            <div id="report_{{ report_title }}" class="report-content">
+            <h1 class="small-text">
+                Открытые обращения в период с {{ report_data[0].date_from }} до {{ report_data[0].date_to }}
+            </h1>
+            <h1 class="small-text">
+                Отчет создан пользователем {{ report_data[0].created_by }}
+            </h1>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID Обращения</th>
+                            <th>Дней без ответа</th>
+                            <th>Статус</th>
+                            <th>Причина обращения</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for customer in report_data %}
+                            <tr>
+                                <td>{{ customer.request_id }}</td>
+                                <td>{{ customer.days }}</td>
+                                {% if customer.request_status == 'pending' %}
+                                    <td>В работе</td>
+                                {% else %}
+                                    <td>Новый</td>
+                                {% endif %}
+                                <td>{{ customer.topic }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div id="pagination-1" class="hidden pagination">
+                    <button class="prevv custom-button">
+                        &#8592
+                    </button>
+                    <button class="next custom-button">
+                        &#8594
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        <div class="button-container">
+            <a href="/manager/view_report" class="custom-button">Назад</a>
+        </div>
+    </div>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const rowsPerPage = 4;
+            function addEmptyRows(table, count) {
+                for (let i = 0; i < count; i++) {
+                    let row = table.insertRow();
+                    for (let j = 0; j < 5; j++) {
+                        let cell = row.insertCell();
+                        cell.innerHTML = "&nbsp;";
+                    }
+                }
+            }
+
+            let requestData = {{ requests|tojson }};
+            let labels = requestData.map(item => item.request_status);
+            let data = requestData.map(item => item.requests_count);
+
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Обращений',
+                        data: data,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+
+            document.querySelectorAll('.pagination').forEach(pagination => {
+                const table = pagination.previousElementSibling;
+                const rows = table.querySelectorAll('tbody tr');
+                const rowsCount = rows.length;
+
+                let currentPage = 1;
+
+                if (rowsCount > rowsPerPage) {
+                    pagination.classList.remove('hidden');
+                }
+
+                function displayRows(start, end) {
+                    rows.forEach((row, index) => {
+                        if (index >= start && index < end) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                }
+
+                function updatePagination() {
+                    const start = (currentPage - 1) * rowsPerPage;
+                    const end = start + rowsPerPage;
+                    displayRows(start, end);
+                }
+
+                pagination.querySelector('.prevv').addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        updatePagination();
+                    }
+                });
+
+                pagination.querySelector('.next').addEventListener('click', () => {
+                    if (currentPage * rowsPerPage < rowsCount) {
+                        currentPage++;
+                        updatePagination();
+                    }
+                });
+
+                updatePagination();
+            });
+        });
+    </script>
+</body>
+</html>

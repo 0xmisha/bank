@@ -1,0 +1,1 @@
+select * from requests where request_status = 'closed'

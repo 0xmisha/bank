@@ -1,0 +1,1 @@
+SELECT * FROM account WHERE id_client = $id_client;

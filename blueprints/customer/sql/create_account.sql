@@ -1,0 +1,1 @@
+INSERT INTO client (surname, birth, address, phone, open_date) VALUES ('$surname', '$birth', '$address', '$phone', '$open_date');

@@ -1,0 +1,1 @@
+select id from external_users where login = "$login"

@@ -1,0 +1,1 @@
+SELECT * FROM transactions_history WHERE account_from IN (SELECT id_account FROM account WHERE id_client = $id_client) OR account_to IN (SELECT id_account FROM account WHERE id_client = $id_client);

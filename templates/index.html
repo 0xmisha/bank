@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Банк</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <h1 class="custom-heading">Банк</h1>
+    <div class="container">
+    {% if auth_message %}
+        <div class="auth-message" style="color: green; text-align: center; margin-bottom: 10px;">
+            {{ auth_message }}
+        </div>
+    {% endif %}
+        <div class="button-container">
+            {% if login %}
+                <tr>
+                    <td>
+                        <a href="/auth/logout" class="custom-button">Выход из аккаунта</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>
+                        <a href="/auth" class="custom-button">Вход в аккаунт</a>
+                    </td>
+                </tr>
+            {% endif %}
+            {% if message %}
+                <div class="errordiv" id="error">
+                    {{ message }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

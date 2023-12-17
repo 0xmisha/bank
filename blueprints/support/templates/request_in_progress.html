@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            color: white;
+        }
+
+        .input-container {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .custom-input {
+            padding: 10px;
+            margin-bottom: 5px;
+        }
+
+        .custom-label {
+            position: absolute;
+            top: -15px;
+            left: 5px;
+            transition: all 0.3s;
+            pointer-events: none;
+            color: #888;
+            background-color: #333;
+            padding: 0 5px;
+        }
+
+        .custom-input:focus + .custom-label,
+        .custom-input:not(:placeholder-shown) + .custom-label {
+            top: -15px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #333;
+            padding: 0 5px;
+        }
+
+        .submit-button-container {
+            margin-top: 20px;
+        }
+
+        .button-container a {
+            margin-top: 10px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .report-content {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .report-title {
+            cursor: pointer;
+            color: #007bff;
+        }
+    </style>
+</head>
+
+<script>
+    function toggleReportContent(reportId) {
+        var content = document.getElementById(reportId);
+        if (content.style.display === "none") {
+            content.style.display = "block";
+        } else {
+            content.style.display = "none";
+        }
+    }
+</script>
+
+
+<body>
+    <h1 class="custom-heading">Просмотр обращений</h1>
+    <div class="container">
+        <div class="error-message" style="color: white; text-align: center; margin-bottom: 10px;">
+            {{ message }}
+        </div>
+        <div class="requests-container">
+            {% for request in requests %}
+                <div>
+                    <h2 class="custom-button" onclick="toggleReportContent('request_{{ request.request_id }}')">
+                        Обращение №{{ request.request_id }}
+                    </h2>
+                    <div id="request_{{ request.request_id }}" class="report-content">
+                        <p>Тема: {{ request.topic }}</p>
+                        {% if request.request_status == 'open' %}
+                            <p>Статус: Создано</p>
+                        {% endif %}
+
+                        {% if request.request_status == "pending" %}
+                            <p>Статус: Рассматривается </p>
+                        {% endif %}
+
+                        {% if request.request_status == "closed" %}
+                            <p>Статус: Закрыто </p>
+                        {% endif %}
+
+                        <p>Дата обращения: {{ request.request_date }}</p>
+                        <p>Последнее обновление: {{ request.last_updated }}</p>
+                        <p>Описание: {{ request.description }}</p>
+                        {% if request.response != None %}
+                            <p>Ответ: {{ request.response }}</p>
+                        {% endif %}
+                        <form action="/support/request/in_progress" method="post">
+                            <div class="input-container">
+                                <textarea id="text" name="text" class="custom-input" required rows="6"></textarea>
+                                <label for="text" class="custom-label">Ответ</label>
+                            </div>
+                            <input type="hidden" id="request_id_input" name="request_id" value={{ request.request_id }}>
+                            <button class="custom-button">Ответить</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="button-container">
+                <a href="/support/request" class="custom-button">Назад</a>
+        </div>
+    </div>
+</body>
+
+</html>

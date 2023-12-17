@@ -1,0 +1,1 @@
+select balance from account where id_account = $id_account;

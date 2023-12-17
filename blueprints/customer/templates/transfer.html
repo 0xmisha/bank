@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="../../../static/style.css">
+    <style>
+        body {
+            color: white;
+        }
+
+        .input-container {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .custom-input {
+            padding: 10px;
+            margin-bottom: 5px;
+        }
+
+
+        .custom-label {
+            position: absolute;
+            top: -15px;
+            left: 5px;
+            transition: all 0.3s;
+            pointer-events: none;
+            color: #888;
+            background-color: #333;
+            padding: 0 5px;
+        }
+
+        .custom-input:focus + .custom-label,
+        .custom-input:not(:placeholder-shown) + .custom-label {
+            top: -15px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #333;
+            padding: 0 5px;
+        }
+
+        .submit-button-container {
+            margin-top: 20px;
+        }
+
+        .button-container a {
+            margin-top: 10px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        input[type=number] {
+          -moz-appearance: textfield;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1 class="custom-heading">Перевод</h1>
+    <div class="container">
+        {% if msg %}
+            <div class="success-message" style="color: green; text-align: center; margin-bottom: 10px;">
+                {{ msg }}
+            </div>
+        {% endif %}
+
+        {% if err_msg %}
+            <div class="error-message" style="color: red; text-align: center; margin-bottom: 10px;">
+                {{ err_msg }}
+            </div>
+        {% endif %}
+
+        <form action="/customer/transfer" method="post">
+            <div class="input-container">
+                <select id="account_select" name="account_select" class="custom-input">
+                    {% for account in accounts %}
+                        <option value="{{ account['id_account'] }}">Номер счета: {{ account['id_account'] }}, Баланс: {{ account['balance'] }}</option>
+                    {% endfor %}
+                </select>
+                <label for="account_select" class="custom-label">Счет списания</label>
+            </div>
+
+
+            <div class="input-container">
+                <input type="number" id="login" name="login" class="custom-input" required>
+                <label for="login" class="custom-label">Счет получателя</label>
+            </div>
+
+            <div class="input-container">
+                <input type="number" id="transfer_amount" name="transfer_amount" class="custom-input" required>
+                <label for="transfer_amount" class="custom-label">Сумма перевода</label>
+            </div>
+
+            <div class="submit-button-container">
+                <button type="submit" class="custom-button">Перевести</button>
+            </div>
+
+        </form>
+        <div class="button-container">
+            <a href="/customer" class="custom-button">Назад</a>
+        </div>
+    </div>
+</body>
+
+</html>

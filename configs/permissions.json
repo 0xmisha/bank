@@ -1,0 +1,63 @@
+{
+    "customer": [
+        "base_handler",
+        "welcome_form_handler_get",
+        "welcome_form_handler_post",
+        "transfer_handler_get",
+        "transfer_handler_post",
+        "history_handler_get",
+        "account_history_handler_post",
+        "account_history_handler_get",
+        "request_handler_get",
+        "request_create_handler_get",
+        "request_create_handler_post",
+        "request_history_handler_get"
+    ],
+    "support": [
+        "manager_handler",
+        "exchange_rates_handler",
+        "request_menu_handler",
+        "request_new_handler",
+        "request_in_progress_handler",
+        "request_closed_handler",
+        "request_new_handler_post",
+        "request_closed_handler",
+        "request_closed_handler_post",
+        "request_in_progress_handler_post",
+        "queries_menu_handler",
+        "request_id_query_handler",
+        "request_id_query_handler_post",
+        "query_surname_handler",
+        "query_surname_handler_post",
+        "query_customer_id_handler_post",
+        "query_customer_id_handler",
+        "query_accounts_handler_post",
+        "query_accounts_handler",
+        "query_transactions_handler",
+        "query_transactions_handler_post"
+    ],
+    "manager": [
+        "base_handler",
+        "manager_handler",
+        "exchange_rates_handler",
+        "queries_menu_handler",
+        "report_view_handler",
+        "report_create_handler",
+        "report_create_new_customers_handler",
+        "report_create_new_customers_handler_post",
+        "report_create_lost_customers_handler",
+        "report_create_lost_customers_handler_post",
+        "report_create_requests_handler",
+        "report_create_requests_handler_post",
+        "report_view_new_customers_handler",
+        "report_view_lost_customers_handler",
+        "report_view_requests_handler"
+    ],
+    "ceo": [
+        "ceo_handler",
+        "report_view_new_customers_handler_ceo",
+        "report_view_lost_customers_handler_ceo",
+        "report_view_requests_handler_ceo",
+        "report_view_handler_ceo"
+    ]
+}

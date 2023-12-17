@@ -1,0 +1,1 @@
+UPDATE requests SET request_status = 'closed', response = '$response' WHERE request_id = $request_id;

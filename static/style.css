@@ -1,0 +1,147 @@
+body {
+    display: table;
+    margin: 0 auto;
+    background: #1D1D1D;
+
+}
+
+table {
+    display: table;
+    margin: 0 auto;
+    font-family: "Arial", Sans-Serif;
+    text-align: center;
+    border-collapse: separate;
+    border-spacing: 5px;
+    background: #2E2E2E;
+    color: #A0A0A0;
+    border: 8px solid #1D1D1D;
+    border-radius: 20px;
+}
+
+th {
+    font-size: 20px;
+    padding: 5px;
+    color: #FFFFFF;
+}
+
+td {
+    text-align: left;
+    background: #333333;
+    padding: 7px;
+    color: #A0A0A0;
+}
+
+td input[type="text"] {
+    background: #333333;
+    width: 100%;
+    height: 40px;
+    border: 0px;
+    outline: none;
+    color: #A0A0A0;
+}
+
+td input[type="submit"] {
+    background: #444444;
+    width: 100%;
+    height: 30px;
+    border: 0px;
+    outline: none;
+    color: #FFFFFF;
+}
+
+td input[type="submit"]:hover {
+    background-color: #555555;
+}
+
+.delrow {
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    background-color: #ff5555;
+    border: none;
+}
+
+.delrow:hover {
+    background-color: #ff6666;
+}
+
+a {
+    background-color: #333333;
+    text-decoration: none;
+    color: #A0A0A0;
+}
+
+.error {
+    text-align: center;
+    color: #FFFFFF;
+    background-color: #FF3333;
+}
+
+.container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.custom-button {
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 8px;
+    background-color: #444444;
+    color: #FFF;
+    font-size: 18px;
+}
+
+.custom-button:hover {
+    background-color: #555555;
+}
+
+.home-button-form {
+    margin-top: 30px;
+}
+
+.home-button {
+    padding: 15px 30px;
+    border-radius: 8px;
+    background-color: #444444;
+    color: #FFF;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+}
+
+.home-button:hover {
+    background-color: #555555;
+}
+
+body, a, input {
+    font-family: "Arial", Sans-Serif;
+}
+
+.custom-input {
+    padding: 15px 30px;
+    border-radius: 8px;
+    background-color: #444444;
+    color: #FFF;
+    font-size: 18px;
+    border: none;
+    width: 100%;
+}
+
+.custom-heading {
+    color: #FFFFFF;
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 20px;
+}
