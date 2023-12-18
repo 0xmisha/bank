@@ -81,7 +81,7 @@ class CeoHandle(AbstractModel, ABC):
 
 class ViewReportNewCustomersHandle(AbstractModel, ABC):
     def __init__(self):
-        self.sql_provider = SQLProvider('blueprints/manager/sql')
+        self.sql_provider = SQLProvider('blueprints/ceo/sql')
         self.db_config = flask.current_app.config['MYSQL_DB_CONFIG']
 
     def execute(self):
@@ -100,7 +100,7 @@ class ViewReportNewCustomersHandle(AbstractModel, ABC):
 
 class ViewReportLostCustomersHandle(AbstractModel, ABC):
     def __init__(self):
-        self.sql_provider = SQLProvider('blueprints/manager/sql')
+        self.sql_provider = SQLProvider('blueprints/ceo/sql')
         self.db_config = flask.current_app.config['MYSQL_DB_CONFIG']
 
     def execute(self):
@@ -120,7 +120,7 @@ class ViewReportLostCustomersHandle(AbstractModel, ABC):
 
 class ViewReportRequestsHandle(AbstractModel, ABC):
     def __init__(self):
-        self.sql_provider = SQLProvider('blueprints/manager/sql')
+        self.sql_provider = SQLProvider('blueprints/ceo/sql')
         self.db_config = flask.current_app.config['MYSQL_DB_CONFIG']
 
     def execute(self):

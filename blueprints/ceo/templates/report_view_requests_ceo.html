@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Отчеты по встречам</title>
+    <title>Отчеты по обращениям</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRgKpGOTR2MHFN8pNTBm4jRTMG5duStbZo5V9WNB7" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -70,8 +70,8 @@
 
 <body>
     <div class="container">
-        <h1 class="custom-heading">Отчеты "Отток клиентов"</h1>
-        <h1 class="custom-heading">для анализа тенденций закрытия счетов</h1>
+        <h1 class="custom-heading">Отчеты "Эффективность обслуживания клиентов"</h1>
+        <h1 class="custom-heading">для анализа необходимости улучшения сервиса.</h1>
         <div class="chart-container" style="position: relative; height:40vh; width:80vw">
             <canvas id="myChart"></canvas>
         </div>
@@ -82,7 +82,7 @@
             </h2>
             <div id="report_{{ report_title }}" class="report-content">
             <h1 class="small-text">
-                Клиенты от {{ report_data[0].min_age }} до {{ report_data[0].max_age }} лет, закрывшие аккаунт в период с {{ report_data[0].date_from }} до {{ report_data[0].date_to }}
+                Открытые обращения в период с {{ report_data[0].date_from }} до {{ report_data[0].date_to }}
             </h1>
             <h1 class="small-text">
                 Отчет создан пользователем {{ report_data[0].created_by }}
@@ -90,21 +90,23 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>ID Клиента</th>
-                            <th>Фамилия</th>
-                            <th>Дата рождения</th>
-                            <th>Дата закрытия</th>
-                            <th>Причина</th>
+                            <th>ID Обращения</th>
+                            <th>Дней без ответа</th>
+                            <th>Статус</th>
+                            <th>Причина обращения</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for customer in report_data %}
                             <tr>
-                                <td>{{ customer.id_customer }}</td>
-                                <td>{{ customer.surname }}</td>
-                                <td>{{ customer.birthday }}</td>
-                                <td>{{ customer.close_date }}</td>
-                                <td>{{ customer.close_reason }}</td>
+                                <td>{{ customer.request_id }}</td>
+                                <td>{{ customer.days }}</td>
+                                {% if customer.request_status == 'pending' %}
+                                    <td>В работе</td>
+                                {% else %}
+                                    <td>Новый</td>
+                                {% endif %}
+                                <td>{{ customer.topic }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -121,7 +123,7 @@
         {% endfor %}
         </div>
         <div class="button-container">
-            <a href="/manager/view_report" class="custom-button">Назад</a>
+            <a href="/ceo/view_report" class="custom-button">Назад</a>
         </div>
     </div>
 <script>
@@ -137,43 +139,32 @@
                 }
             }
 
-            let dataFromFlask = {{ lost_customers|tojson }};
-            let labels = dataFromFlask.map(item => item.close_date);
-            let data = dataFromFlask.map(item => item.customers);
+            let requestData = {{ requests|tojson }};
+            let labels = requestData.map(item => item.request_status);
+            let data = requestData.map(item => item.requests_count);
 
             var ctx = document.getElementById('myChart').getContext('2d');
             var myChart = new Chart(ctx, {
-                type: 'line',
+                type: 'pie',
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Количество зарегистрировавшихся пользователей',
+                        label: 'Обращений',
                         data: data,
-                        backgroundColor: 'rgba(0, 123, 255, 0.5)',
-                        borderColor: 'rgba(0, 123, 255, 1)',
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
                         borderWidth: 1
                     }]
                 },
                 options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                color: 'white'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                color: 'white',
-                            }
-                        },
-                    },
                     plugins: {
                         legend: {
                             labels: {
@@ -182,7 +173,6 @@
                         }
                     }
                 }
-
             });
 
             document.querySelectorAll('.pagination').forEach(pagination => {

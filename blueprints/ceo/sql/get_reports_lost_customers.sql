@@ -1,0 +1,2 @@
+select * from reports_lost_customers
+join reports_lost_customers_data on reports_lost_customers.id_report = reports_lost_customers_data.id_report

@@ -16,11 +16,27 @@
             {{ auth_message }}
         </div>
     {% endif %}
+    {% if err_message %}
+        <div class="err-message" style="color: red; text-align: center; margin-bottom: 10px;">
+            {{ err_message }}
+        </div>
+    {% endif %}
         <div class="button-container">
             {% if login %}
                 <tr>
                     <td>
-                        <a href="/auth/logout" class="custom-button">Выход из аккаунта</a>
+                        {% if role == 'ceo' %}
+                            <a href="/ceo" class="custom-button">Личный кабинет</a>
+                        {% endif %}
+                        {% if role == 'manager' %}
+                            <a href="/manager" class="custom-button">Личный кабинет</a>
+                        {% endif %}
+                        {% if role == 'support' %}
+                            <a href="/support" class="custom-button">Личный кабинет</a>
+                        {% endif %}
+                        {% if role == 'customer' %}
+                            <a href="/customer" class="custom-button">Личный кабинет</a>
+                        {% endif %}
                     </td>
                 </tr>
             {% else %}

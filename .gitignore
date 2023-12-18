@@ -2,4 +2,3 @@
 .idea
 .DS-store
 __pycache__
-configs/db_config.json

@@ -55,9 +55,9 @@
     ],
     "ceo": [
         "ceo_handler",
+        "report_view_handler_ceo",
         "report_view_new_customers_handler_ceo",
         "report_view_lost_customers_handler_ceo",
-        "report_view_requests_handler_ceo",
-        "report_view_handler_ceo"
+        "report_view_requests_handler_ceo"
     ]
 }

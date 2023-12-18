@@ -10,7 +10,7 @@ def login_required(func):
         user_session = flask.session
         if user_session.get('is_auth'):
             return func(*args, **kwargs)
-        return flask.redirect('/?auth_message=Вы не вошли в аккаунт')
+        return flask.redirect('/?err_message=Вы не вошли в аккаунт')
     return wrapper
 
 
@@ -25,5 +25,5 @@ def role_required(func):
         if endpoint.split('.')[-1] in accesses[role]:
             return func(*args, **kwargs)
 
-        return flask.redirect('/')
+        return flask.redirect('/?err_message=Нет доступа к просмотру страницы')
     return wrapper

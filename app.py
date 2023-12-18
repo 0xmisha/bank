@@ -23,14 +23,17 @@ app.secret_key = 'imsecretkey'
 @app.route('/')
 def indexHandler():
     message = None
-    if flask.request.args:
-        message = flask.request.args.get('error')
-
-    auth_message = flask.request.args.get('auth_message')
-
     login = flask.session['is_auth'] if flask.session else None
     role = flask.session['role'] if flask.session else None
-    return flask.render_template('index.html', login=login, message=message, auth_message=auth_message, role=role)
+
+    if flask.request.args:
+        message = flask.request.args.get('error')
+        err_message = flask.request.args.get('err_message')
+        auth_message = flask.request.args.get('auth_message')
+        return flask.render_template('index.html', login=login, message=message,
+                                     auth_message=auth_message, role=role, err_message=err_message)
+
+    return flask.render_template('index.html', login=login, message=message)
 
 
 if __name__ == '__main__':

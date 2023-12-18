@@ -20,7 +20,7 @@ def ceo_handler():
 @login_required
 @role_required
 def report_view_handler_ceo():
-    view = CeoView('report_view_menu.html')
+    view = CeoView('report_view_menu_ceo.html')
     return view.render_get()
 
 
@@ -30,7 +30,7 @@ def report_view_handler_ceo():
 def report_view_new_customers_handler_ceo():
     model = ViewReportNewCustomersHandle()
     model_res = model.execute()
-    view = ReportNewCustomersView('report_view_new_customers.html')
+    view = ReportNewCustomersView('report_view_new_customers_ceo.html')
     return view.render_post(model_res)
 
 
@@ -40,7 +40,7 @@ def report_view_new_customers_handler_ceo():
 def report_view_lost_customers_handler_ceo():
     model = ViewReportLostCustomersHandle()
     model_res = model.execute()
-    view = ReportLostCustomersView('report_view_lost_customers.html')
+    view = ReportLostCustomersView('report_view_lost_customers_ceo.html')
     return view.render_post(model_res)
 
 
@@ -50,5 +50,5 @@ def report_view_lost_customers_handler_ceo():
 def report_view_requests_handler_ceo():
     model = ViewReportRequestsHandle()
     model_res = model.execute()
-    view = ReportRequestsView('report_view_requests.html')
+    view = ReportRequestsView('report_view_requests_ceo.html')
     return view.render_post(model_res)
