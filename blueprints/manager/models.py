@@ -86,8 +86,15 @@ class CreateReportNewSustomerHandle(AbstractModel, ABC):
         self.db_config = flask.current_app.config['MYSQL_DB_CONFIG']
 
     def execute(self, topic, date_from, date_to, age_from, age_to):
+        sql_statement_report_names = self.sql_provider.get('get_all_report_topics.sql', {})
+        report_names = select_sql(self.db_config, sql_statement_report_names)
+
+        if any(topic in name['request_topic'] for name in report_names):
+            return {'status': 'error', 'error_message': 'Отчет с таким именем уже существует.'}
+
         params = [topic, session['login'], date_from, date_to, calculate_birth_date(age_to),
                   calculate_birth_date(age_from)]
+
         try:
             call_stored_procedure(self.db_config, 'CreateNewCustomersReport', params)
             return {'status': 'success', 'success_message': 'Отчет успешно создан.'}
@@ -101,6 +108,12 @@ class CreateReportLostCustomerHandle(AbstractModel, ABC):
         self.db_config = flask.current_app.config['MYSQL_DB_CONFIG']
 
     def execute(self, topic, date_from, date_to, age_from, age_to):
+        sql_statement_report_names = self.sql_provider.get('get_all_report_topics.sql', {})
+        report_names = select_sql(self.db_config, sql_statement_report_names)
+
+        if any(topic in name['request_topic'] for name in report_names):
+            return {'status': 'error', 'error_message': 'Отчет с таким именем уже существует.'}
+
         params = [topic, session['login'], date_from, date_to, calculate_birth_date(age_to),
                   calculate_birth_date(age_from)]
         try:
@@ -116,6 +129,12 @@ class CreateReportRequestsHandle(AbstractModel, ABC):
         self.db_config = flask.current_app.config['MYSQL_DB_CONFIG']
 
     def execute(self, topic, date_from, date_to):
+        sql_statement_report_names = self.sql_provider.get('get_all_report_topics.sql', {})
+        report_names = select_sql(self.db_config, sql_statement_report_names)
+
+        if any(topic in name['request_topic'] for name in report_names):
+            return {'status': 'error', 'error_message': 'Отчет с таким именем уже существует.'}
+
         params = [date_from, date_to, topic, session['login']]
         try:
             call_stored_procedure(self.db_config, 'CreateRequestsReport', params)
@@ -137,6 +156,7 @@ class ViewReportNewCustomersHandle(AbstractModel, ABC):
 
         sql_statement_new_customers = self.sql_provider.get('get_new_customers.sql', {})
         new_customers = select_sql(self.db_config, sql_statement_new_customers)
+        print(reports)
         if reports:
             return {'status': 'success', 'reports': reports, 'new_customers': new_customers}
         else:

@@ -12,6 +12,12 @@
         .small-text {
             font-size: larger;
         }
+
+        .error-text {
+            font-size: larger;
+            text-decoration: underline;
+        }
+
         body {
             color: white;
         }
@@ -48,8 +54,8 @@
         }
         .button-container {
             display: flex;
-            justify-content: center; /* Выравнивает элементы по центру по горизонтали */
-            flex-wrap: wrap; /* Позволяет элементам обертываться на следующую строку при необходимости */
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
 
@@ -86,6 +92,7 @@
             <h1 class="small-text">
                 Отчет создан пользователем {{ report_data[0].created_by }}
             </h1>
+            {% if report_data and report_data[0].id_data != None %}
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -99,15 +106,18 @@
                     <tbody>
                         {% for customer in report_data %}
                             <tr>
-                                <td>{{ customer.id_customer }}</td>
-                                <td>{{ customer.surname }}</td>
-                                <td>{{ customer.birthday }}</td>
-                                <td>{{ customer.open_date }}</td>
-                                <td>{{ customer.accounts }}</td>
+                                    <td>{{ customer.id_customer }}</td>
+                                    <td>{{ customer.surname }}</td>
+                                    <td>{{ customer.birthday }}</td>
+                                    <td>{{ customer.open_date }}</td>
+                                    <td>{{ customer.accounts }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+            {% else %}
+                <div class="error-text">Пользователей, попадающих под заданные критерии, нет.</div>
+            {% endif %}
                 <div id="pagination-1" class="hidden pagination">
                     <button class="prevv custom-button">
                         &#8592

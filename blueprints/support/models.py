@@ -35,7 +35,6 @@ class NewRequestPostHandle(AbstractModel, ABC):
         self.db_config = flask.current_app.config['MYSQL_DB_CONFIG']
 
     def execute(self, id_request):
-        print(id_request)
         sql_statement_upd_request = self.sql_provider.get('set_request_pending.sql',
                                                            {'request_id': id_request})
         result = execute_sql(self.db_config, sql_statement_upd_request)

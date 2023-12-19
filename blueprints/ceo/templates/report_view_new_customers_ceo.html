@@ -48,8 +48,12 @@
         }
         .button-container {
             display: flex;
-            justify-content: center; /* Выравнивает элементы по центру по горизонтали */
-            flex-wrap: wrap; /* Позволяет элементам обертываться на следующую строку при необходимости */
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .error-text {
+            font-size: larger;
+            text-decoration: underline;
         }
 
 
@@ -86,6 +90,7 @@
             <h1 class="small-text">
                 Отчет создан пользователем {{ report_data[0].created_by }}
             </h1>
+            {% if report_data and report_data[0].id_data != None %}
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -108,6 +113,9 @@
                         {% endfor %}
                     </tbody>
                 </table>
+            {% else %}
+                <div class="error-text">Пользователей, попадающих под заданные критерии, нет.</div>
+            {% endif %}
                 <div id="pagination-1" class="hidden pagination">
                     <button class="prevv custom-button">
                         &#8592
