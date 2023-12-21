@@ -11,9 +11,12 @@ class DBContextManager:
     def __enter__(self):
         try:
             self.conn = connect(**self.config)
-            self.conn.begin()
             self.cursor = self.conn.cursor()
+
+            self.conn.begin()
+
             return self.cursor
+
         except OperationalError as err:
             print(err.args)
             return None

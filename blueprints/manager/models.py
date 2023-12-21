@@ -71,6 +71,7 @@ def calculate_days_without_response(data):
             item['days'] = (today - item['last_updated']).days
     return data
 
+
 class ManagerHandle(AbstractModel, ABC):
     def __init__(self):
         self.sql_provider = SQLProvider('blueprints/manager/sql')
@@ -88,6 +89,12 @@ class CreateReportNewSustomerHandle(AbstractModel, ABC):
     def execute(self, topic, date_from, date_to, age_from, age_to):
         sql_statement_report_names = self.sql_provider.get('get_all_report_topics.sql', {})
         report_names = select_sql(self.db_config, sql_statement_report_names)
+
+        if age_from >= age_to or age_to < 0 or age_from < 0:
+            return {'status': 'error', 'error_message': 'Неправильно указан диапазон возраста.'}
+
+        if date_from >= date_to:
+            return {'status': 'error', 'error_message': 'Неправильно указан диапазон дат.'}
 
         if any(topic in name['request_topic'] for name in report_names):
             return {'status': 'error', 'error_message': 'Отчет с таким именем уже существует.'}
@@ -111,6 +118,12 @@ class CreateReportLostCustomerHandle(AbstractModel, ABC):
         sql_statement_report_names = self.sql_provider.get('get_all_report_topics.sql', {})
         report_names = select_sql(self.db_config, sql_statement_report_names)
 
+        if age_from >= age_to or age_to < 0 or age_from < 0:
+            return {'status': 'error', 'error_message': 'Неправильно указан диапазон возраста.'}
+
+        if date_from >= date_to:
+            return {'status': 'error', 'error_message': 'Неправильно указан диапазон дат.'}
+
         if any(topic in name['request_topic'] for name in report_names):
             return {'status': 'error', 'error_message': 'Отчет с таким именем уже существует.'}
 
@@ -131,6 +144,9 @@ class CreateReportRequestsHandle(AbstractModel, ABC):
     def execute(self, topic, date_from, date_to):
         sql_statement_report_names = self.sql_provider.get('get_all_report_topics.sql', {})
         report_names = select_sql(self.db_config, sql_statement_report_names)
+
+        if date_from >= date_to:
+            return {'status': 'error', 'error_message': 'Неправильно указан диапазон дат.'}
 
         if any(topic in name['request_topic'] for name in report_names):
             return {'status': 'error', 'error_message': 'Отчет с таким именем уже существует.'}

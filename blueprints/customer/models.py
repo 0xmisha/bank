@@ -3,7 +3,7 @@ import flask
 from flask import session
 from abstract.model import AbstractModel
 from database.sql_provider import SQLProvider
-from database.operations import select_sql, execute_sql, execute_transaction
+from database.operations import select_sql, execute_sql, send_transaction
 from datetime import datetime
 
 
@@ -76,11 +76,19 @@ class TransferHandle(AbstractModel, ABC):
         sql_statement_acc_exists = self.sql_provider.get('accounts_exists.sql',
                                                          {'id_account': receiver})
         acc_exists = select_sql(self.db_config, sql_statement_acc_exists)
+
         if not acc_exists:
             session['transfer_status'] = 'Ошибка в номере счета получателя. Средства не были списаны.'
             return {'status': 'error'}
 
-        execute_transaction(self.db_config, amount, sender, receiver)
+        transaction_sqls = []
+        trans_params = {'amount': amount, 'sender': sender, 'receiver': receiver}
+
+        for i in range(1, 8):
+            transaction_sqls.append(self.sql_provider.get(f'tr{i}.sql', trans_params))
+
+        send_transaction(flask.current_app.config['MYSQL_DB_CONFIG'], transaction_sqls)
+
         session['transfer_status'] = 'Перевод успешно выполнен.'
         return {'status': 'success'}
 

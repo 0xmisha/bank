@@ -62,7 +62,6 @@ class RequestHistoryView(AbstractView):
 
     def render_post(self, model_data):
         if model_data['status'] == 'success':
-            print(model_data['data'])
             return flask.render_template(self.html, requests=model_data['data'])
         else:
             return flask.render_template(self.html, err_msg=model_data['error_type'])

@@ -30,17 +30,12 @@ def call_stored_procedure(db_config, procedure_name, params):
             raise ValueError("ERROR. CURSOR NOT CREATED!")
 
 
-def execute_transaction(db_config, amount, sender, receiver):
+def send_transaction(db_config, sql_statements):
     with DBContextManager(db_config) as cursor:
-        if cursor:
-            with open('blueprints/customer/sql/send_transaction.sql', 'r') as file:
-                queries = file.read().split(';')
-            for query in queries:
-                if query.strip() != "":
-                    query = query.replace('$amount', str(amount))
-                    query = query.replace('$sender', str(sender))
-                    query = query.replace('$receiver', str(receiver))
+        if not cursor:
+            raise ValueError('Курсор не создан')
 
-                    cursor.execute(query)
-        else:
-            raise ValueError("ERROR. CURSOR NOT CREATED!")
+        for sql in sql_statements:
+            cursor.execute(sql)
+
+        return True
